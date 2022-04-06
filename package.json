@@ -2,6 +2,7 @@
   "name": "trumedia-proj",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://saul-rotter.github.io/react_app",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
@@ -42,9 +43,7 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ],
-    "proxy": "http://localhost:4000",
-    "homepage": "http://saul-rotter.github.io/react_app"
+    ]
   },
   "devDependencies": {
     "gh-pages": "^3.2.3"
