@@ -2,6 +2,7 @@
   "name": "trumedia-proj",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:4000",
   "homepage": "http://saul-rotter.github.io/react_app",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.3",
