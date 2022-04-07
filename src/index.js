@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import { genAPIToken, genFetchPlayers, genFetchPlayerData } from './data/api';
 
 function Square(props) {
     return (
@@ -24,13 +25,16 @@ function Square(props) {
       return <Square value={this.state.squares[i]} onClick={() => this.handleClick(i)}/>;
     }
     
-    renderResetButton() {
+    renderResetButton(token) {
       if (!this.state.winner) {
         return;
       }
+      let players = genFetchPlayers(token);
+      console.log(players);
+
       return (
         <button onClick={() => this.resetGame()}>
-          {process.env.REACT_APP_NOT_SECRET_CODE}
+          {"Reset Game"}
         </button>
       );
     }
