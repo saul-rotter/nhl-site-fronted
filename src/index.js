@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { genAPIToken, genFetchPlayers, genFetchPlayerData } from './data/api';
+import { genAPIToken, genFetchPlayers, genFetchPlayerData } from './api/api';
 
 function Square(props) {
     return (
