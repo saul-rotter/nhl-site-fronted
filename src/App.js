@@ -1,12 +1,7 @@
 import React from 'react'
 import './index.css';
-import { genAPIToken, genFetchPlayers, genFetchPlayerData } from './api/api';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
+import GamesTable from './features/games/GamesTable'
 
 function Square(props) {
   return (
@@ -34,8 +29,6 @@ class Board extends React.Component {
     if (!this.state.winner) {
       return;
     }
-    let players = genFetchPlayers(token);
-    console.log(players);
 
     return (
       <button onClick={() => this.resetGame()}>
@@ -73,6 +66,7 @@ class Board extends React.Component {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
 
+
     return (
       <div>
         <div className="status">{status}</div>
@@ -97,7 +91,7 @@ class Board extends React.Component {
   }
 }
 
-class Game extends React.Component {
+export class Game extends React.Component {
   render() {
     return (
       <div className="game">
@@ -135,11 +129,17 @@ function calculateWinner(squares) {
 
 function App() {
   return (
-    <Router>
       <div className="App">
-        <Game />
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={
+              <GamesTable />
+            }
+          />
+        </Routes>
       </div>
-    </Router>
   )
 }
 

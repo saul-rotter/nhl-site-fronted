@@ -1,48 +1,77 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import Table from '../../components/Table'
+import { 
+  useGetAPITokenQuery, 
+  useGetPlayerGamesQuery, 
+  useGetPlayersQuery 
+} from '../api/apiSlice'
+import {selectToken} from '../players/playersSlice'
 
-export const GamesTable = () => {
+export default function GamesTable() {
 
   const games = useSelector(state => state.games)
+  // const token = useSelector(selectToken)
+  // console.log(token)
+  
+  const {
+    data: token,
+    isLoading: isTokenLoading,
+    isFetching: isTokenFetching,
+    isSuccess: isTokenSuccess,
+    isError: isTokenError,
+    error: tokenError,
+  } = useGetAPITokenQuery()
+  console.log(token)
+  let content = ''
+  if (isTokenSuccess) {
+    const {
+      data: players = [],
+      isLoading,
+      isFetching,
+      isSuccess,
+      isError,
+      error,
+    } = useGetPlayersQuery(token['token'])
+    if (isSuccess) {
+      content = JSON.stringify(players)
+    }
+  }
+  else {
+    const {
+      data: players = [],
+      isLoading,
+      isFetching,
+      isSuccess,
+      isError,
+      error,
+    } = useGetPlayersQuery(token)
+  }
 
-  function prepareColumnsForTable () {
+  function prepareColumns () {
     const columns = [
         { Header: 'Week', accessor: 'week'},
-        { Header: 'Game Date', accessor: 'date' },
-        { Header: 'Opponent',
-            width: 100,
-            Cell: props => {
-                const { original } = props;
-                const { opponent, logo } = original;
-                return (
-                    <div style={{display: "inline-block", width: "100px"}}>
-                        <div>{opponent} {logo}</div>
-                    </div>
-                );
-            }
-        },
-        { Header:  'Yards/Attempt', accessor: 'ydsAtt'},
-        { Header: 'Completion %', accessor: 'complPct'},
-        { Header: 'Attempts', accessor: 'attempts' },
-        { Header: 'Completions', accessor: 'completions' },
-        { Header: 'Interceptions', accessor: 'interceptions' },
-        { Header: 'Passing Touchdowns', accessor: 'passingTouchdowns' },
-        { Header: 'Passing Yards', accessor: 'passingYards' },
-    ]
+        { Header: 'Game Date', accessor: 'gameDate'},
+        { Header: 'Opponent', accessor: 'opponent'},
+        { Header: 'Attempts', accessor: 'att'},
+        { Header: 'Completions', accessor: 'cmp'},
+        { Header: 'Interceptions', accessor: 'int'},
+        { Header: 'Passing Touchdowns', accessor: 'psTD'},
+        { Header: 'Passing Yards', accessor: 'psYds'},
+        { Header: 'Sacks', accessor: 'sack'},
+        { Header: 'Rushes', accessor: 'rush'},
+        { Header: 'Rushing Yards', accessor: 'rshYds'},
+        { Header: 'Rushing Touchdowns', accessor: 'rshTD'},
+    ];
     return columns;
   }
 
-  function getGameData() {
-    return 0;
-  }
-
-  const renderedGames = <Table data={games} columns={prepareColumnsForTable()}/>
+ 
 
   return (
-    <section className="posts-list">
-      <h2>Posts</h2>
-      {renderedGames}
-    </section>
+    <div >
+      <h2>Games</h2>
+      <div>{content}</div>
+    </div>
   )
 }
