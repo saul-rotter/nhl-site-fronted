@@ -1,7 +1,10 @@
 import React from 'react'
 import './index.css';
 import { Route, Routes } from 'react-router-dom'
-import GamesTable from './features/games/GamesTable'
+import { GamesTable } from './features/games/GamesTable'
+import { useSelector } from 'react-redux'
+import { useGetAPITokenQuery } from './features/api/apiSlice'
+import PlayersList from './features/players/playersList';
 
 function Square(props) {
   return (
@@ -128,6 +131,21 @@ function calculateWinner(squares) {
 }
 
 function App() {
+  const {
+    data: token,
+    isLoading: isTokenLoading,
+    isFetching: isTokenFetching,
+    isSuccess: isTokenSuccess,
+    isError: isTokenError,
+    error: tokenError,
+  } = useGetAPITokenQuery()
+
+  let playerList = <div></div>
+  let playerPage = <div></div>
+  if (isTokenSuccess) {
+    playerList = <div><PlayersList token={token['token']}/></div>
+    playerPage = <GamesTable token={token['token']}/>
+  }
   return (
       <div className="App">
         <Routes>
@@ -135,9 +153,10 @@ function App() {
             exact
             path="/"
             element={
-              <GamesTable />
+              playerList
             }
           />
+          <Route exact path="/players/:playerId" element={playerPage} />
         </Routes>
       </div>
   )

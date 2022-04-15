@@ -1,52 +1,21 @@
+// Tomorrow starts on fixing the querying. Not working, and once does can add styling as well
 import React from 'react'
 import { useSelector } from 'react-redux'
 import Table from '../../components/Table'
-import { 
-  useGetAPITokenQuery, 
-  useGetPlayerGamesQuery, 
-  useGetPlayersQuery 
-} from '../api/apiSlice'
-import {selectToken} from '../players/playersSlice'
+import { selectGameById } from './gamesSlice'
+import { useGetAPITokenQuery } from '../api/apiSlice'
 
-export default function GamesTable() {
-
-  const games = useSelector(state => state.games)
-  // const token = useSelector(selectToken)
-  // console.log(token)
-  
+export const GamesTable = ({ match }) => {
+  const { playerID } = match.params
   const {
     data: token,
-    isLoading: isTokenLoading,
-    isFetching: isTokenFetching,
     isSuccess: isTokenSuccess,
-    isError: isTokenError,
-    error: tokenError,
   } = useGetAPITokenQuery()
-  console.log(token)
-  let content = ''
+  let games = null
   if (isTokenSuccess) {
-    const {
-      data: players = [],
-      isLoading,
-      isFetching,
-      isSuccess,
-      isError,
-      error,
-    } = useGetPlayersQuery(token['token'])
-    if (isSuccess) {
-      content = JSON.stringify(players)
-    }
+    let games = useSelector((state) => selectGameById(state, token, playerID))
   }
-  else {
-    const {
-      data: players = [],
-      isLoading,
-      isFetching,
-      isSuccess,
-      isError,
-      error,
-    } = useGetPlayersQuery(token)
-  }
+  
 
   function prepareColumns () {
     const columns = [
@@ -65,13 +34,15 @@ export default function GamesTable() {
     ];
     return columns;
   }
-
- 
+  let content = <div></div>
+  if (games) {
+    content = <Table columns={prepareColumns()} data={games}/>
+  }
 
   return (
     <div >
       <h2>Games</h2>
-      <div>{content}</div>
+      {content()}
     </div>
   )
 }

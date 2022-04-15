@@ -1,42 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createEntityAdapter, createSelector } from '@reduxjs/toolkit'
 
-const initialState = [
-  {
-    week: 3,
-    gameDate: '2018-09-20 20:20:00',
-    opponent: 'NYJ',
-    opponentImage: 'https://static.trumedianetworks.com/images/nfl/teams/3430.png',
-    att: 23,
-    cmp: 17,
-    sack: 1,
-    int: 0,
-    psYds: 201,
-    psTD: 0,
-    rush: 2,
-    rshYds: -2,
-    rshTD: 0
-  },
-  {
-    week: 4,
-    gameDate: '2018-09-30 16:05:00',
-    opponent: 'OAK',
-    opponentImage: 'https://static.trumedianetworks.com/images/nfl/teams/2520.png',
-    att: 41,
-    cmp: 21,
-    sack: 2,
-    int: 2,
-    psYds: 295,
-    psTD: 2,
-    rush: 4,
-    rshYds: 10,
-    rshTD: 0
-  },
-]
+import { apiSlice } from '../api/apiSlice'
 
-const gamesSlice = createSlice({
-  name: 'games',
-  initialState,
-  reducers: {}
+const gamesAdapter = createEntityAdapter()
+
+const initialState = gamesAdapter.getInitialState()
+const extendedApiSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) => ({
+    getPlayerGames: builder.query({
+      query: (token, game_id) => ({
+        url: `nfl/player/${game_id}`,
+        headers: {
+          'content-type':'application/json',
+          'tempToken': token
+        }
+      }),
+      transformResponse: responseData => {
+        return gamesAdapter.setAll(initialState, responseData)
+      }
+    }),
+  }),
 })
 
-export default gamesSlice.reducer
+export const { useGetPlayerGamesQuery } = extendedApiSlice
+
+export const selectGamesResult = apiSlice.endpoints.getPlayerGames.select()
+
+const selectGamesData = createSelector(
+  selectGamesResult,
+  (gamesResult) => gamesResult.data
+)
+
+export const { 
+  selectAll: selectAllGames, 
+  selectById: selectGameById, 
+} =
+gamesAdapter.getSelectors((state) => selectGamesData(state))

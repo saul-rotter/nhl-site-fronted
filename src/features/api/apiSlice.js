@@ -13,24 +13,6 @@ export const apiSlice = createApi({
         }
       }), 
       providesTags: ['Token'],
-    }),
-    getPlayers: builder.query({
-      query: (token) => ({
-        url: 'nfl/players',
-        headers: {
-          'content-type':'application/json',
-          'tempToken': token
-        }
-      }),
-    }),
-    getPlayerGames: builder.query({
-      query: (token, player_id) => ({
-        url: `nfl/player/${player_id}`,
-        headers: {
-          'content-type':'application/json',
-          'tempToken': token
-        }
-      })
     })
   })
 })
