@@ -2,18 +2,27 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import Table from '../../components/Table'
-import { selectGameById } from './gamesSlice'
 import { useGetAPITokenQuery } from '../api/apiSlice'
+import { useGetPlayerGamesQuery } from './gamesSlice'
+import { useParams } from "react-router-dom";
 
-export const GamesTable = ({ match }) => {
-  const { playerID } = match.params
+export const GamesTable = () => {
+  const { playerId } = useParams();
   const {
-    data: token,
+    data,
     isSuccess: isTokenSuccess,
   } = useGetAPITokenQuery()
-  let games = null
+  const token = data['token']
+  let content = <div></div>
   if (isTokenSuccess) {
-    let games = useSelector((state) => selectGameById(state, token, playerID))
+    console.log(token)
+    const {
+      data: games,
+      isSuccess,
+    } = useGetPlayerGamesQuery({token, playerId})
+    if (isSuccess) {
+      content = <Table columns={prepareColumns()} data={games}/>
+    }
   }
   
 
@@ -22,27 +31,24 @@ export const GamesTable = ({ match }) => {
         { Header: 'Week', accessor: 'week'},
         { Header: 'Game Date', accessor: 'gameDate'},
         { Header: 'Opponent', accessor: 'opponent'},
-        { Header: 'Attempts', accessor: 'att'},
-        { Header: 'Completions', accessor: 'cmp'},
-        { Header: 'Interceptions', accessor: 'int'},
-        { Header: 'Passing Touchdowns', accessor: 'psTD'},
-        { Header: 'Passing Yards', accessor: 'psYds'},
-        { Header: 'Sacks', accessor: 'sack'},
-        { Header: 'Rushes', accessor: 'rush'},
-        { Header: 'Rushing Yards', accessor: 'rshYds'},
-        { Header: 'Rushing Touchdowns', accessor: 'rshTD'},
+        { Header: 'Attempts', accessor: 'Att'},
+        { Header: 'Completions', accessor: 'Cmp'},
+        { Header: 'Interceptions', accessor: 'Int'},
+        { Header: 'Passing Touchdowns', accessor: 'PsTD'},
+        { Header: 'Passing Yards', accessor: 'PsYds'},
+        { Header: 'Sacks', accessor: 'Sack'},
+        { Header: 'Rushes', accessor: 'Rush'},
+        { Header: 'Rushing Yards', accessor: 'RshYds'},
+        { Header: 'Rushing Touchdowns', accessor: 'RshTD'},
     ];
     return columns;
   }
-  let content = <div></div>
-  if (games) {
-    content = <Table columns={prepareColumns()} data={games}/>
-  }
+  
 
   return (
-    <div >
+    <div>
       <h2>Games</h2>
-      {content()}
+      {content}
     </div>
   )
 }

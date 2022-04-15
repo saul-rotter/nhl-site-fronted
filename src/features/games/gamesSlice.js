@@ -8,31 +8,15 @@ const initialState = gamesAdapter.getInitialState()
 const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPlayerGames: builder.query({
-      query: (token, game_id) => ({
-        url: `nfl/player/${game_id}`,
+      query: ({ token, playerId } ) => ({
+        url: `nfl/player/${playerId}`,
         headers: {
           'content-type':'application/json',
           'tempToken': token
         }
-      }),
-      transformResponse: responseData => {
-        return gamesAdapter.setAll(initialState, responseData)
-      }
+      })
     }),
   }),
 })
 
 export const { useGetPlayerGamesQuery } = extendedApiSlice
-
-export const selectGamesResult = apiSlice.endpoints.getPlayerGames.select()
-
-const selectGamesData = createSelector(
-  selectGamesResult,
-  (gamesResult) => gamesResult.data
-)
-
-export const { 
-  selectAll: selectAllGames, 
-  selectById: selectGameById, 
-} =
-gamesAdapter.getSelectors((state) => selectGamesData(state))

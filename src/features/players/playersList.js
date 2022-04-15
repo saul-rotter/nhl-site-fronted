@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 import { useGetPlayersQuery } from './playersSlice'
 let PlayerExcerpt = ({ player }) => {
   return (
@@ -7,6 +7,7 @@ let PlayerExcerpt = ({ player }) => {
       <Link to={`/players/${player.playerId}`}>
         {player.playerId}
       </Link>
+      <Outlet />
       </div>
   )
 }
