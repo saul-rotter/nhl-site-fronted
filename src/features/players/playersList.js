@@ -7,7 +7,7 @@ export function PlayerLink({ player }) {
     <div>
       <Link to={`/players/${player.playerId}`}>
       <img data-tip="Select player to view statistics" 
-        src={player.playerImage} alt={player.fullName}/>
+        src={player.playerImage} alt={player.fullName} className="img-thumbnail"/>
       <br/>
       <div>{player.fullName}</div>
       </Link>

@@ -5,6 +5,7 @@ import { GamesTable } from './features/games/GamesTable'
 import { PlayersList } from './features/players/playersList';
 import PlayerNavigation from './components/Navbar';
 import { fetchAPIToken } from './features/api/apiSlice'
+import { Container } from 'react-bootstrap';
 
 function App() {
   const token = fetchAPIToken();
@@ -17,16 +18,19 @@ function App() {
   }
   return (
       <div className="App">
+        <Container fluid>
+        {playerList}
         <Routes>
           <Route
             exact
             path="/"
             element={
-              playerList
+              <h1>Welcome to the homepage, choose a player from above</h1>
             }
           />
           <Route exact path="/players/:playerId" element={playerPage} />
         </Routes>
+        </Container>
       </div>
   )
 }

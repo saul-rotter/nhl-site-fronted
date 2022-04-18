@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, NavItem, } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { PlayerLink } from '../features/players/playersList';
 import { useGetPlayersQuery } from '../features/players/playersSlice';
@@ -14,22 +14,24 @@ function PlayerNavigation({ token }) {
   let content = null;
   
   if (isSuccess) {
-    content = players.map(player => <NavItem key={player.playerId}><PlayerLink player={player}/></NavItem>);
+    content = players.map(player => <Nav.Item style={{padding: 5}} key={player.playerId}><PlayerLink player={player}/></Nav.Item>);
   }
   return (
-    <Navbar bg="dark" variant="dark">
-        <Navbar.Brand>
-        <Link to={`/`}>
+    <Navbar collapseOnSelect bg="dark" variant="dark" style={{height: "min-content", width:"max-content"}}>
+        <Navbar.Brand href='/' style={{width: "20%", paddingRight: 5}}>
           <img
             src={'../../trumedialogo.png'}
             alt={'Logo'}
+            className="img-thumbnail"
           />
-        </Link>
         </Navbar.Brand>
-      <Nav>
-        {content}
-      </Nav>
+        <Navbar.Collapse id="responsive-navbar-nav">
+        <Nav style={{width: "25%", paddingRight: 10}}>
+          {content}
+        </Nav>
+        </Navbar.Collapse>
     </Navbar>
+    
   );
 }
 
