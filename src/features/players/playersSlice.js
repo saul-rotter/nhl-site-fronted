@@ -1,4 +1,4 @@
-import { apiSlice } from '../api/apiSlice'
+import { apiSlice, fetchAPIToken } from '../api/apiSlice'
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

@@ -1,21 +1,12 @@
-// Tomorrow starts on fixing the querying. Not working, and once does can add styling as well
 import React from 'react'
-import { useSelector } from 'react-redux'
 import Table from '../../components/Table'
-import { useGetAPITokenQuery } from '../api/apiSlice'
 import { useGetPlayerGamesQuery } from './gamesSlice'
 import { useParams } from "react-router-dom";
 
-export const GamesTable = () => {
-  const { playerId } = useParams();
-  const {
-    data,
-    isSuccess: isTokenSuccess,
-  } = useGetAPITokenQuery()
-  const token = data['token']
+export const GamesTable = ({ token }) => {
+  const { playerId } = useParams()
   let content = <div></div>
-  if (isTokenSuccess) {
-    console.log(token)
+  if (token) {
     const {
       data: games,
       isSuccess,
@@ -40,6 +31,8 @@ export const GamesTable = () => {
         { Header: 'Rushes', accessor: 'Rush'},
         { Header: 'Rushing Yards', accessor: 'RshYds'},
         { Header: 'Rushing Touchdowns', accessor: 'RshTD'},
+        { Header: 'Yds/Att', accessor: 'Yd/Att'},
+        { Header: 'Cmp%', accessor: 'Cmp%'},
     ];
     return columns;
   }

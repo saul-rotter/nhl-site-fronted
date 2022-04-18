@@ -1,10 +1,5 @@
-import { createEntityAdapter, createSelector } from '@reduxjs/toolkit'
+import { apiSlice, fetchAPIToken } from '../api/apiSlice'
 
-import { apiSlice } from '../api/apiSlice'
-
-const gamesAdapter = createEntityAdapter()
-
-const initialState = gamesAdapter.getInitialState()
 const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPlayerGames: builder.query({
@@ -14,7 +9,16 @@ const extendedApiSlice = apiSlice.injectEndpoints({
           'content-type':'application/json',
           'tempToken': token
         }
-      })
+      }),
+      transformResponse: (response) => {
+        let new_response = response;
+        new_response = new_response.map((game) => {
+          game['Yd/Att'] = (game['PsYds'] / game['Att']).toFixed(3);
+          game['Cmp%'] = (game['Cmp'] / game['Att']).toFixed(3);
+          return game;
+        });
+        return new_response;
+      }
     }),
   }),
 })

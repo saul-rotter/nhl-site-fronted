@@ -2,25 +2,18 @@ import React from 'react'
 import './index.css';
 import { Route, Routes } from 'react-router-dom'
 import { GamesTable } from './features/games/GamesTable'
-import { useGetAPITokenQuery } from './features/api/apiSlice'
-import PlayersList from './features/players/playersList';
+import { PlayersList } from './features/players/playersList';
+import PlayerNavigation from './components/Navbar';
+import { fetchAPIToken } from './features/api/apiSlice'
 
 function App() {
-  const {
-    data: token,
-    isLoading: isTokenLoading,
-    isFetching: isTokenFetching,
-    isSuccess: isTokenSuccess,
-    isError: isTokenError,
-    error: tokenError,
-  } = useGetAPITokenQuery()
+  const token = fetchAPIToken();
 
-  let playerList = <div></div>
-  let playerPage = <div></div>
-  if (isTokenSuccess) {
-    console.log(token['token'])
-    playerList = <div><PlayersList token={token['token']}/></div>
-    playerPage = <GamesTable token={token['token']}/>
+  let playerList = <div></div>;
+  let playerPage = <div></div>;
+  if (token) {
+    playerList = <div><PlayerNavigation token={token}/></div>
+    playerPage = <GamesTable token={token}/>
   }
   return (
       <div className="App">
