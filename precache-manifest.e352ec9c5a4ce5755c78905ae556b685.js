@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "c49981447821036e0f80",
+    "revision": "12de7f333a8f3c8ad586",
     "url": "/react_app/static/css/main.850ec3b3.chunk.css"
   },
   {
-    "revision": "c49981447821036e0f80",
-    "url": "/react_app/static/js/main.19c5a772.chunk.js"
+    "revision": "12de7f333a8f3c8ad586",
+    "url": "/react_app/static/js/main.54ec05d7.chunk.js"
   },
   {
     "revision": "dd7a70cdeda87e112e79",
@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/react_app/static/js/2.6e0996ce.chunk.js"
   },
   {
-    "revision": "4e126d53140e4f34420e2a6c63e10976",
+    "revision": "5e05ebedfebf201487ef935ae409b492",
     "url": "/react_app/index.html"
   }
 ];
