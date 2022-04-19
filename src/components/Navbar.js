@@ -1,7 +1,6 @@
 import React from 'react';
-import { Navbar, Nav, NavItem, Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { PlayerLink } from '../features/players/playersList';
+import { Navbar, Nav } from "react-bootstrap";
+import { PlayerLink } from "../features/players/playersLinks";
 import { useGetPlayersQuery } from '../features/players/playersSlice';
 
 

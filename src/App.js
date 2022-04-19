@@ -2,7 +2,6 @@ import React from 'react'
 import './index.css';
 import { Route, Routes } from 'react-router-dom'
 import PlayerPage from "./features/players/playerPage";
-import { PlayersList } from './features/players/playersList';
 import PlayerNavigation from './components/Navbar';
 import { fetchAPIToken } from './features/api/apiSlice'
 import { Container } from 'react-bootstrap';

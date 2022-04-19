@@ -1,11 +1,9 @@
 import React from "react";
-import GameTable from "../../components/Table";
-import { useGetPlayerGamesQuery } from "../games/gamesSlice";
+import { useGetPlayerGamesQuery } from "../playerGames/playerGamesSlice";
 import { useParams } from "react-router-dom";
 import PlayerCard from "./playerCard";
 import { Col, Row } from "react-bootstrap";
-import { format } from "date-fns";
-import PlayerChart from "./playerChart";
+import PlayerCharts from "./playerCharts";
 
 function PlayerPage({ token }) {
   const { playerId } = useParams();
@@ -17,49 +15,14 @@ function PlayerPage({ token }) {
     });
     if (isSuccess) {
       content = (
-        <Row xs={2}>
+        <Row xs={2} className="justify-content-space-evenly">
           <Col>
-            <PlayerCard player={games[0]} />
+            <PlayerCard player={games} />
           </Col>
-          <Col>
-            <h2>Games</h2>
-            <PlayerChart playerGames={games} />
-          </Col>
+          <PlayerCharts playerGames={games} />
         </Row>
       );
     }
-  }
-
-  function prepareColumns() {
-    const columns = [
-      {
-        Header: "Week",
-        accessor: "week",
-        disableFilters: true,
-        sticky: "left",
-      },
-      {
-        Header: "Game Date",
-        accessor: "gameDate",
-        sticky: "left",
-        Cell: ({ value }) => {
-          return format(new Date(value), "MM/dd/yyyy");
-        },
-      },
-      { Header: "Opponent", accessor: "opponent", sticky: "left" },
-      { Header: "Attempts", accessor: "Att" },
-      { Header: "Completions", accessor: "Cmp" },
-      { Header: "Interceptions", accessor: "Int" },
-      { Header: "Passing Touchdowns", accessor: "PsTD" },
-      { Header: "Passing Yards", accessor: "PsYds" },
-      { Header: "Sacks", accessor: "Sack" },
-      { Header: "Rushes", accessor: "Rush" },
-      { Header: "Rushing Yards", accessor: "RshYds" },
-      { Header: "Rushing Touchdowns", accessor: "RshTD" },
-      { Header: "Yds/Att", accessor: "Yd/Att" },
-      { Header: "Cmp%", accessor: "Cmp%" },
-    ];
-    return columns;
   }
 
   return content;
