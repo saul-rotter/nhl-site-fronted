@@ -59,7 +59,7 @@ function PlayerChart({ playerGames }) {
   return (
     <LineChart
       width={500}
-      height={300}
+      height={500}
       data={playerGames}
       margin={{
         top: 5,
@@ -69,17 +69,17 @@ function PlayerChart({ playerGames }) {
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="week" />
+      <XAxis dataKey="week" type="number" label="Week" />
       <YAxis />
       <Tooltip />
       <Legend />
       <Line
         type="monotone"
-        dataKey="PsYds"
+        dataKey="Cmp%"
         stroke="#8884d8"
         activeDot={{ r: 8 }}
       />
-      <Line type="monotone" dataKey="PsTD" stroke="#82ca9d" />
+      <Line type="monotone" dataKey="Yd/Att" stroke="#82ca9d" />
     </LineChart>
   );
 }
