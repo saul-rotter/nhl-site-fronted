@@ -1,7 +1,7 @@
 import React from 'react'
 import './index.css';
 import { Route, Routes } from 'react-router-dom'
-import { GamesTable } from './features/games/GamesTable'
+import PlayerPage from "./features/players/playerPage";
 import { PlayersList } from './features/players/playersList';
 import PlayerNavigation from './components/Navbar';
 import { fetchAPIToken } from './features/api/apiSlice'
@@ -14,7 +14,7 @@ function App() {
   let playerPage = <div></div>;
   if (token) {
     playerList = <div><PlayerNavigation token={token}/></div>
-    playerPage = <GamesTable token={token}/>
+    playerPage = <PlayerPage token={token} />;
   }
   return (
       <div className="App">
