@@ -23,11 +23,7 @@ function PlayerNavigation({ token }) {
       style={{ height: "min-content", width: "max-content" }}
     >
       <Navbar.Brand href="/" style={{ width: "20%", paddingRight: 5 }}>
-        <img
-          src={"../../public/trumedialogo.png"}
-          alt={"Logo"}
-          className="img-thumbnail"
-        />
+        <img src={"/trumedialogo.png"} alt={"Logo"} className="img-thumbnail" />
       </Navbar.Brand>
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav style={{ width: "25%", paddingRight: 10 }}>{content}</Nav>

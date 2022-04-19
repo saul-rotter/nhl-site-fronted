@@ -21,6 +21,7 @@ function PlayerGraph({ playerGames }) {
           top: 5,
           bottom: 5,
           left: 5,
+          right: 5,
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
