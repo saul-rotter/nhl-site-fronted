@@ -1,2 +1,6 @@
 {
+	"python.linting.enabled": false,
+	"python.formatting.provider": "autopep8",
+	"prettier.jsxSingleQuote": true,
+	"prettier.singleQuote": true
 }
