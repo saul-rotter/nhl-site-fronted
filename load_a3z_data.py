@@ -2,8 +2,8 @@ import os
 import os.path
 import numpy as np
 import pandas as pd
-from api.blueprints.teams_bp import fetch_id_from_abbrev
-from api.blueprints.players_bp import fetch_id_from_team_number
+from backend.app.blueprints.teams_bp import fetch_id_from_abbrev
+from backend.app.blueprints.players_bp import fetch_id_from_team_number
 
 # from datetime import datetime, timedelta
 
