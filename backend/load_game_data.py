@@ -1,19 +1,13 @@
 # type: ignore
 
-import numpy as np
 import pandas as pd
 import urllib.request
 import json
 from datetime import datetime, timedelta
 import re
 import requests
-import load_a3z_data
-import sys
-from api.database import Database
-import argparse
-from api.blueprints import teams_bp
-from api.blueprints import players_bp
-from api.database.models import player, team, event, game, shift
+import load_a3z_data as load_a3z_data
+from database.models import player, team, event, game, shift
 
 players_dict = {}
 teams_dict = {}
@@ -50,8 +44,7 @@ def fetch_shifts(gameId):
                 playerId=int(shift_obj['playerId']),
                 teamId=int(shift_obj['teamId']),
                 shiftStart=int(shift_obj['shiftStart']),
-                shiftEnd=int(shift_obj['shiftEnd']),
-                shiftNumber=int(shift_obj['shiftNumber'])
+                shiftEnd=int(shift_obj['shiftEnd'])
             )
         )
     return shifts_list
@@ -118,7 +111,7 @@ def deleteLeadingZeros(inputString):
     return outputString
 
 
-def fetch_or_initialize_pbp(pbp, gameId, players_dict, teams_dict, homeTeamId, awayTeamId,):
+def fetch_or_initialize_pbp(pbp, df, gameId, players_dict, teams_dict, homeTeamId, awayTeamId,):
     period = [None for i in range(len(pbp))]
     time = ["0:00" for i in range(len(pbp))]
     dateTime = [None for i in range(len(pbp))]
@@ -198,7 +191,8 @@ def fetch_or_initialize_pbp(pbp, gameId, players_dict, teams_dict, homeTeamId, a
     )
     # pbpdf.drop(["period", "time"], axis=1, inplace=True)
     # pbpdf.set_index("seconds", inplace=True, drop=False)
-    a3z_pbp = load_a3z_data.get_clean_a3z_game_data(players_dict, teams_dict)
+    a3z_pbp = load_a3z_data.get_clean_a3z_game_data(
+        df, players_dict, teams_dict)
     merged_df = (
         pd.merge(
             pbpdf,
@@ -270,37 +264,3 @@ def fill_from_boxscore(boxscore):
             )
         )
     return (teams, players)
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-g", "--game", dest="gameId",
-                        help="Game ID", type=int)
-    database = Database()
-    database.init_no_app(True)
-    with database.session() as db:
-        with db.begin():
-            args = parser.parse_args()
-            data = fetch_game_from_nhl_api(args.gameId)
-            (teams_bp, players_bp) = fill_from_boxscore(
-                data["liveData"]["boxscore"])
-            awayTeamId = data["gameData"]["teams"]["away"]["id"]
-            homeTeamId = data["gameData"]["teams"]["home"]["id"]
-            game = fill_game_metadata(data)
-            db.add(game)
-            db.add_all(teams_bp)
-            db.add_all(players_bp)
-            events = fetch_or_initialize_pbp(
-                data["liveData"]["plays"]["allPlays"],
-                args.gameId,
-                players_dict,
-                teams_dict,
-                homeTeamId,
-                awayTeamId,
-            )
-            events.to_sql("events", database.engine,
-                          if_exists="append", index=False)
-            shifts = fetch_shifts(
-                data["gameData"]["game"]["pk"]
-            )
-            db.add_all(shifts)

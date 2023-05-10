@@ -2,33 +2,32 @@ import os
 import os.path
 import numpy as np
 import pandas as pd
-from backend.app.blueprints.teams_bp import fetch_id_from_abbrev
-from backend.app.blueprints.players_bp import fetch_id_from_team_number
-
+import re
 # from datetime import datetime, timedelta
 
 # dfs = pd.read_excel(file_name, sheetname=None)
 
 
-def convert_game_time(period, time):
+def convert_game_time(index, period, time):
+    if (time == '1900-01-04 13:13:00'):
+        print(index)
+
     time_list = time.split(":")
     clock = (int(time_list[0]) * 60) + (int(time_list[1]))
-    return int(period * 1200 - clock)
+    return int(period) * 1200 - clock
 
 
-def read_a3z_game_data():
-    filename = os.path.join(os.getcwd(), "Tracking-Table 1.csv")
-    df = pd.read_csv(filename)
+def read_a3z_game_data(df):
     df = df.drop(["Home", "Road", "Date"], axis=1)
     columns = list(df.drop("Period", axis=1).columns)
     df.dropna(how="all", inplace=True, subset=columns)
-    df["Time"] = df["Time"].astype(str)
+
     df.rename(
         columns={"Period": "period", "Time": "time"},
         inplace=True,
     )
     df["seconds"] = df.apply(
-        lambda x: convert_game_time(x["period"], x["time"]), axis=1
+        lambda x: convert_game_time(x, x["period"], x["time"]), axis=1
     )
     return df.sort_values("seconds").reset_index(drop=True)
 
@@ -286,8 +285,8 @@ def clean_shots(shots):
     ]
 
 
-def get_clean_a3z_game_data(players_dict, teams_dict):
-    a3z_pbp = read_a3z_game_data()
+def get_clean_a3z_game_data(df, players_dict, teams_dict):
+    a3z_pbp = read_a3z_game_data(df)
     # Zone Entries
 
     # 0:3 in all tables as the recombination
@@ -350,5 +349,6 @@ def get_clean_a3z_game_data(players_dict, teams_dict):
         else None,
         axis=1,
     )
+    a3z_final['period'] = a3z_final['period'].astype(int)
     a3z_final.dropna(how="all", inplace=True, subset=["event"])
     return a3z_final
