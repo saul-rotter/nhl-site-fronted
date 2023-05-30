@@ -5,13 +5,9 @@ import {
 	Typography,
 	Button,
 	Stack,
-	Menu,
-	MenuItem,
 } from '@mui/material';
 import React from 'react';
 import SportsHockeyIcon from '@mui/icons-material/SportsHockey';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { useState } from 'react';
 
 export const Navbar = () => {
 	return (

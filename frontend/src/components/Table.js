@@ -1,5 +1,11 @@
 import React from 'react';
-import { useTable, useFilters, usePagination } from 'react-table';
+import {
+	useTable,
+	useFilters,
+	usePagination,
+	useGroupBy,
+	useExpanded,
+} from 'react-table';
 import {
 	TableContainer,
 	Table,
@@ -77,6 +83,8 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 			},
 		},
 		useFilters,
+		useGroupBy,
+		useExpanded,
 		usePagination
 	);
 	let pagination = <></>;
@@ -137,6 +145,12 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 							<TableRow {...headerGroup.getHeaderGroupProps()}>
 								{headerGroup.headers.map((column) => (
 									<TableCell {...column.getHeaderProps()}>
+										{column.canGroupBy ? (
+											// If the column can be grouped, let's add a toggle
+											<span {...column.getGroupByToggleProps()}>
+												{column.isGrouped ? '🛑 ' : '👊 '}
+											</span>
+										) : null}
 										{column.render('Header')}
 										<Stack sx={{ maxWidth: '300px' }}>
 											{column.canFilter ? column.render('Filter') : null}
@@ -154,7 +168,22 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 									{row.cells.map((cell) => {
 										return (
 											<TableCell {...cell.getCellProps()}>
-												{cell.render('Cell')}
+												{cell.isGrouped ? (
+													// If it's a grouped cell, add an expander and row count
+													<>
+														<span {...row.getToggleRowExpandedProps()}>
+															{row.isExpanded ? '👇' : '👉'}
+														</span>{' '}
+														{cell.render('Cell')} ({row.subRows.length})
+													</>
+												) : cell.isAggregated ? (
+													// If the cell is aggregated, use the Aggregated
+													// renderer for cell
+													cell.render('Aggregated')
+												) : cell.isPlaceholder ? null : ( // For cells with repeated values, render null
+													// Otherwise, just render the regular cell
+													cell.render('Cell')
+												)}
 											</TableCell>
 										);
 									})}

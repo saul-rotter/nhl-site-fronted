@@ -1,62 +1,40 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import {
 	DropdownFilter,
-	DefaultColumnFilter,
-	NumberRangeColumnFilter,
-	TextSearchFilter,
-	fuzzyTextFilterFn,
-	fuzzyListFilterFn,
 	SliderColumnFilter,
 	TeamDropdownFilter,
 } from '../utilities/filters';
-import { useTable, useFilters, usePagination } from 'react-table';
-import { Players, Player } from './PlayerCell';
+import { Players, Player } from './player/PlayerCell';
 import BaseTable from './Table';
 import { teamColors } from '../utilities/teamColors';
 import TeamAvatar from './team/TeamAvatar';
 
-const IndeterminateCheckbox = React.forwardRef(
-	({ indeterminate, ...rest }, ref) => {
-		const defaultRef = React.useRef();
-		const resolvedRef = ref || defaultRef;
-
-		React.useEffect(() => {
-			resolvedRef.current.indeterminate = indeterminate;
-		}, [resolvedRef, indeterminate]);
-
-		return <input type='checkbox' ref={resolvedRef} {...rest} />;
-	}
-);
-
 const Styles = styled.div`
 	.badge {
-		background-color: #9ae6b4;
 		font-size: 8px;
 		font-weight: bold;
 		text-transform: uppercase;
 	}
-`;
-
-const EventTableInstance = () => {
-	const [tableData, setTableData] = useState();
-	const { data: apiResponse, isLoading } = useQuery(['games'], () => {
-		return axios.get(`http://127.0.0.1:4999/games/`, {
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-	});
-	useEffect(() => {
-		setTableData(apiResponse);
-	}, [apiResponse]);
-	if (isLoading || !tableData) {
-		return <div>Loading...</div>;
+	.team-card {
+		border-radius: 8px;
+		padding: 16px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		transition: background-color 0.3s ease;
 	}
-	return <EventTable eventTableData={tableData.data.events} />;
-};
+
+	.team-1 {
+		color: #fff;
+	}
+
+	.team-2 {
+		color: #fff;
+	}
+`;
 
 const EventTable = ({ eventTableData }) => {
 	const columns = useMemo(() => [
@@ -69,30 +47,35 @@ const EventTable = ({ eventTableData }) => {
 					Filter: SliderColumnFilter,
 					filter: 'between',
 					show: true,
+					disableGroupBy: true,
 				},
 				{
 					Header: 'Period',
 					accessor: 'period',
 					Filter: DropdownFilter,
 					show: true,
+					disableGroupBy: true,
 				},
 				{
 					Header: 'Game Time',
 					accessor: 'time',
 					disableFilters: true,
 					show: false,
+					disableGroupBy: true,
 				},
 				{
 					Header: 'Home Score',
 					accessor: 'homeScore',
 					Filter: DropdownFilter,
 					show: true,
+					disableGroupBy: true,
 				},
 				{
 					Header: 'Away Score',
 					accessor: 'awayScore',
 					Filter: DropdownFilter,
 					show: true,
+					disableGroupBy: true,
 				},
 				{
 					Header: 'Strength',
@@ -112,6 +95,8 @@ const EventTable = ({ eventTableData }) => {
 					accessor: 'event',
 					Filter: DropdownFilter,
 					show: true,
+					aggregate: 'count',
+					Aggregated: ({ value }) => `${value} Events`,
 				},
 
 				{
@@ -119,86 +104,87 @@ const EventTable = ({ eventTableData }) => {
 					accessor: 'type',
 					Filter: DropdownFilter,
 					show: true,
+					aggregate: 'count',
+					Aggregated: ({ value }) => `${value} Event Types`,
 				},
 				{
 					Header: 'Team',
-					accessor: 'team',
+					accessor: 'team.name',
 					Filter: TeamDropdownFilter,
 					show: true,
-					Cell: ({ cell: { value } }) => {
-						return (
-							<span
-								className='badge'
-								style={{
-									backgroundColor: teamColors[value['id']],
-									textShadow: 'white 0px 0px 10px',
-								}}>
-								<TeamAvatar teamId={value['id']} />
-								{value['name']}
-							</span>
-						);
+					Cell: ({ row }) => {
+						return <TeamCell row={row} team_type={'team'} />;
 					},
 					filter: 'fuzzyText',
+					aggregate: 'count',
+					Aggregated: ({ value }) => `${value} Teams`,
 				},
 				{
 					Header: 'Player',
-					accessor: 'player',
-					Cell: ({ cell: { row, value } }) => {
-						let backgroundColor = teamColors[row.values['team']['id']];
-						return <Player player={value} backgroundColor={backgroundColor} />;
-					},
-					filter: 'fuzzyText',
-					show: true,
-				},
-				{
-					Header: 'Opposing Team',
-					accessor: 'oppTeam',
-					Filter: TeamDropdownFilter,
-					show: true,
-					Cell: ({ cell: { value } }) => {
+					accessor: 'player.name',
+					Cell: ({ row }) => {
 						return (
-							<span
-								className='badge'
-								style={{
-									backgroundColor: teamColors[value['id']],
-									textShadow: 'white 0px 0px 10px',
-								}}>
-								<TeamAvatar teamId={value['id']} />
-								{value['name']}
-							</span>
+							<PlayerCell row={row} team={'teamId'} player_type={'player'} />
 						);
 					},
 					filter: 'fuzzyText',
+					show: true,
+					aggregate: 'uniqueCount',
+					Aggregated: ({ value }) => `${value} Players`,
+				},
+				{
+					Header: 'Opposing Team',
+					accessor: 'oppTeam.name',
+					Filter: TeamDropdownFilter,
+					show: true,
+					aggregate: 'uniqueCount',
+					Cell: ({ row }) => {
+						return <TeamCell row={row} team_type={'oppTeam'} />;
+					},
+					filter: 'fuzzyText',
+					aggregate: 'count',
+					Aggregated: ({ value }) => `${value} Teams`,
 				},
 				{
 					Header: 'Opposing Player',
-					accessor: 'oppPlayer',
-					Cell: ({ cell: { row, value } }) => {
-						let backgroundColor = teamColors[row.values['oppTeam']['id']];
-						return <Player player={value} backgroundColor={backgroundColor} />;
+					accessor: 'oppPlayer.name',
+					Cell: ({ row }) => {
+						return (
+							<PlayerCell
+								row={row}
+								team={'oppTeamId'}
+								player_type={'oppPlayer'}
+							/>
+						);
 					},
 					filter: 'fuzzyText',
 					show: true,
-				},
-				{
-					Header: 'Opposing Team on Ice',
-					accessor: 'opp_team_on_ice',
-					Cell: ({ cell: { row, value } }) => {
-						let backgroundColor = teamColors[row.values['oppTeam']['id']];
-						return <Players values={value} backgroundColor={backgroundColor} />;
-					},
-					filter: 'fuzzyList',
-					show: false,
+					aggregate: 'uniqueCount',
+					Aggregated: ({ value }) => `${value} Players`,
 				},
 				{
 					Header: 'Team on Ice',
 					accessor: 'team_on_ice',
 					Cell: ({ cell: { row, value } }) => {
-						let backgroundColor = teamColors[row.values['team']['id']];
+						let backgroundColor = teamColors[row.original['team']['id']];
 						return <Players values={value} backgroundColor={backgroundColor} />;
 					},
 					filter: 'fuzzyList',
 					show: false,
+					disableGroupBy: true,
+					Aggregated: () => ``,
+				},
+				{
+					Header: 'Opposing Team on Ice',
+					accessor: 'opp_team_on_ice',
+					Cell: ({ cell: { row, value } }) => {
+						let backgroundColor = teamColors[row.original['oppTeam']['id']];
+						return <Players values={value} backgroundColor={backgroundColor} />;
+					},
+					filter: 'fuzzyList',
+					show: false,
+					disableGroupBy: true,
+					Aggregated: ({ value }) => ``,
 				},
 				{
 					Header: 'Play Type',
@@ -222,10 +208,15 @@ const EventTable = ({ eventTableData }) => {
 				},
 				{
 					Header: 'Primary Assist',
-					accessor: 'primaryAssist',
-					Cell: ({ row, value }) => {
-						let backgroundColor = teamColors[row.values['team']['id']];
-						return <Player player={value} backgroundColor={backgroundColor} />;
+					accessor: 'primaryAssist.name',
+					Cell: ({ row }) => {
+						return (
+							<PlayerCell
+								row={row}
+								team={'teamId'}
+								player_type={'primaryAssist'}
+							/>
+						);
 					},
 					show: false,
 				},
@@ -246,10 +237,15 @@ const EventTable = ({ eventTableData }) => {
 				},
 				{
 					Header: 'Secondary Assist',
-					accessor: 'secondaryAssist',
-					Cell: ({ row, value }) => {
-						let backgroundColor = teamColors[row.values['team']['id']];
-						return <Player player={value} backgroundColor={backgroundColor} />;
+					accessor: 'secondaryAssist.name',
+					Cell: ({ row }) => {
+						return (
+							<PlayerCell
+								row={row}
+								team={'teamId'}
+								player_type={'secondaryAssist'}
+							/>
+						);
 					},
 					show: false,
 				},
@@ -270,10 +266,15 @@ const EventTable = ({ eventTableData }) => {
 				},
 				{
 					Header: 'Tertiary Assist',
-					accessor: 'tertiaryAssist',
-					Cell: ({ row, value }) => {
-						let backgroundColor = teamColors[row.values['team']['id']];
-						return <Player player={value} backgroundColor={backgroundColor} />;
+					accessor: 'tertiaryAssist.name',
+					Cell: ({ row }) => {
+						return (
+							<PlayerCell
+								row={row}
+								team={'teamId'}
+								player_type={'tertiaryAssist'}
+							/>
+						);
 					},
 					show: false,
 				},
@@ -294,19 +295,21 @@ const EventTable = ({ eventTableData }) => {
 				},
 				{
 					Header: 'Recovery',
-					accessor: 'recovery',
-					Cell: ({ row, value }) => {
-						let backgroundColor = teamColors[row.values['team']['id']];
-						return <Player player={value} backgroundColor={backgroundColor} />;
+					accessor: 'recovery.name',
+					Cell: ({ row }) => {
+						return (
+							<PlayerCell row={row} team={'teamId'} player_type={'recovery'} />
+						);
 					},
 					show: false,
 				},
 				{
 					Header: 'Retrieval',
-					accessor: 'retrieval',
-					Cell: ({ row, value }) => {
-						let backgroundColor = teamColors[row.values['team']['id']];
-						return <Player player={value} backgroundColor={backgroundColor} />;
+					accessor: 'retrieval.name',
+					Cell: ({ row }) => {
+						return (
+							<PlayerCell row={row} team={'teamId'} player_type={'retrieval'} />
+						);
 					},
 					show: false,
 				},
@@ -324,4 +327,41 @@ const EventTable = ({ eventTableData }) => {
 	);
 };
 
-export default EventTableInstance;
+const PlayerCell = ({ row, team, player_type }) => {
+	let backgroundColor;
+	let player;
+	if (row.isGrouped) {
+		backgroundColor = teamColors[row.leafRows[0].original[team]];
+		player = row.leafRows[0].original[player_type];
+	} else {
+		backgroundColor = teamColors[row.original[team]];
+		player = row.original[player_type];
+	}
+	return <Player player={player} backgroundColor={backgroundColor} />;
+};
+
+const TeamCell = ({ row, team_type }) => {
+	let backgroundColor;
+	let team;
+	if (row.isGrouped) {
+		team = row.leafRows[0].original[team_type];
+		console.log(team);
+		backgroundColor = teamColors[row.leafRows[0].original[team_type].id];
+	} else {
+		team = row.original[team_type];
+		backgroundColor = teamColors[row.original[team_type].id];
+	}
+	return (
+		<span
+			className='badge'
+			style={{
+				backgroundColor: backgroundColor,
+				textShadow: 'white 0px 0px 10px',
+			}}>
+			<TeamAvatar teamId={team.id} />
+			{team.name}
+		</span>
+	);
+};
+
+export default EventTable;

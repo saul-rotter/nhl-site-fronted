@@ -58,10 +58,7 @@ export function TeamDropdownFilter({
 	const options = React.useMemo(() => {
 		const options = new Set();
 		preFilteredRows.forEach((row) => {
-			if ('name' in row.values[id]) {
-				return options.add(row.values[id]['name']);
-			}
-			return options.add(row.values[id]);
+			return options.add(row.values[id]['name']);
 		});
 		return [...options.values()];
 	}, [id, preFilteredRows]);
@@ -274,7 +271,11 @@ export function NumberRangeColumnFilter({
 
 export function fuzzyTextFilterFn(rows, id, filterValue) {
 	return matchSorter(rows, filterValue, {
-		keys: [(row) => row.values[id]['name']],
+		keys: [
+			(row) => {
+				return row.values[id] ? row.values[id]['name'] : '';
+			},
+		],
 	});
 }
 // Let the table remove the filter if the string is empty
