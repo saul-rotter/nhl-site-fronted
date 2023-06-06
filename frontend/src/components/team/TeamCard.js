@@ -14,12 +14,13 @@ import { teamColors } from '../../utilities/teamColors';
 // src =
 // 	'https://cms.nhl.bamgrid.com/images/headshots/current/168x168/{playerId}.jpg';
 export default function TeamCard({ className, teamData }) {
+	console.log(teamData);
 	return (
 		<Card
 			className={className}
 			sx={{ backgroundColor: teamColors[teamData['id']] }}>
 			<CardHeader
-				title={teamData['name']}
+				title={<Typography variant='subtitle1'> {teamData['name']}</Typography>}
 				avatar={<TeamAvatar teamId={teamData['id']} />}
 			/>
 			<CardContent>

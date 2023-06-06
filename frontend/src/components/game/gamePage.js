@@ -4,6 +4,7 @@ import { GameCard } from './gameCard';
 import EventTable from '../eventsTable';
 import { useQueryGameData } from '../../api/nhl';
 import { useParams } from 'react-router-dom';
+import PageLayout from '../pageLayout';
 
 export const GamePageInstance = () => {
 	const [gameData, setGameData] = useState();
@@ -19,10 +20,9 @@ export const GamePageInstance = () => {
 };
 
 const GamePage = ({ gameData }) => {
+	const topCard = <GameCard gameData={gameData.data.game} />;
+	const eventsTable = <EventTable eventTableData={gameData.data.events} />;
 	return (
-		<Paper sx={{ padding: '32px' }} elevation={2}>
-			<GameCard gameData={gameData.data.game} />
-			<EventTable eventTableData={gameData.data.events} />
-		</Paper>
+		<PageLayout topCard={topCard} center={eventsTable} footer={'No content'} />
 	);
 };

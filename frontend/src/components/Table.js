@@ -44,7 +44,7 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 		}),
 		[]
 	);
-
+	console.log(columns);
 	const defaultColumn = React.useMemo(
 		() => ({
 			// Let's set up our default Filter UI
@@ -79,7 +79,7 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 				hiddenColumns: columns[0].columns.map((column) => {
 					if (column.show === false) return column.accessor || column.id;
 				}),
-				pageSize: 5,
+				pageSize: 25,
 			},
 		},
 		useFilters,
@@ -217,3 +217,59 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 };
 
 export default BaseTable;
+
+{
+	/* <TableContainer>
+					<Table {...getTableProps()}>
+						<TableHead>
+							{headerGroups.map((headerGroup) => (
+								<TableRow {...headerGroup.getHeaderGroupProps()}>
+									{headerGroup.headers.map((column) => (
+										<TableCell
+											{...column.getHeaderProps()}
+											style={{ color: '#002D72', fontWeight: 'bold' }}>
+											{column.render('Header')}
+										</TableCell>
+									))}
+								</TableRow>
+							))}
+						</TableHead>
+						<TableBody {...getTableBodyProps()}>
+							{isLoading ? (
+								<TableRow>
+									<TableCell colSpan={columns.length}>Loading...</TableCell>
+								</TableRow>
+							) : (
+								rows.map((row) => {
+									prepareRow(row);
+									return (
+										<React.Fragment key={row.getRowProps().key}>
+											<TableRow {...row.getRowProps()}>
+												{row.cells.map((cell) => (
+													<TableCell {...cell.getCellProps()}>
+														{cell.render('Cell')}
+													</TableCell>
+												))}
+											</TableRow>
+											<TableRow>
+												<TableCell colSpan={columns.length}>
+													<Collapse
+														in={row.id === expandedRow}
+														timeout='auto'
+														unmountOnExit>
+														<Card
+															variant='outlined'
+															style={{ padding: '16px' }}>
+															{/* Additional information card }
+														</Card>
+													</Collapse>
+												</TableCell>
+											</TableRow>
+										</React.Fragment>
+									);
+								})
+							)}
+						</TableBody>
+					</Table>
+				</TableContainer> */
+}

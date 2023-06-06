@@ -14,11 +14,12 @@ import {
 	ListItemIcon,
 	Divider,
 	ListItemAvatar,
-	Avatar
+	Avatar,
 } from '@mui/material';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 import TeamCard from '../team/TeamCard';
+import GPTTeamCard from '../team/GPTTeamCard';
 const Styles = styled.div`
 	.team-card {
 		border-radius: 8px;
@@ -41,17 +42,23 @@ const Styles = styled.div`
 export const GameCard = ({ gameData }) => {
 	return (
 		<Styles>
-			<Card>
+			<Card variant='outlined'>
 				<CardContent>
-					<Typography variant="h5" component="h2">
-						{gameData['startTime']}
-					</Typography>
-					<Grid container spacing={2} justifyContent="center">
-						<Grid item xs={12} sm={6}>
-							<TeamCard className="team-card team-1" teamData={gameData['awayTeam']} />
+					<Typography variant='h5'>Game Start Time</Typography>
+					<Typography variant='caption'>{gameData['startTime']}</Typography>
+					<Grid
+						container
+						spacing={2}
+						justifyContent='center'
+						alignItems='center'>
+						<Grid item xs={5} align='center'>
+							<GPTTeamCard teamData={gameData['awayTeam']} />
 						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TeamCard className="team-card team-2" teamData={gameData['homeTeam']} />
+						<Grid item xs={2} align='center'>
+							<Typography variant='h5'>AT</Typography>
+						</Grid>
+						<Grid item xs={5} align='center'>
+							<GPTTeamCard teamData={gameData['homeTeam']} />
 						</Grid>
 					</Grid>
 				</CardContent>
