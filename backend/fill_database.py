@@ -1,5 +1,5 @@
 # type: ignore
-import requests
+import numpy as np
 import dropbox
 import pandas as pd
 from load_nhl_data import NHLGameFeed
@@ -20,7 +20,7 @@ args = parser.parse_args()
 
 # Set up Dropbox API client
 dbx = dropbox.Dropbox(
-    "sl.BebEak0dpgF6NZLEPCfg2BUmH-Ce0NT0neO2CKCasEs0Q3LH47Lh-55f1Wbcs-kyvuHVlv1eMdDWIgFkmwJMWEBsKDTEtOWZxaqGqFjbPsFsp3Z-ebn5YQthQpKvxW53yqRU4dU")
+    "sl.BgeOIP718JHjwGviHb3qOj1-w-D0g9VRyrb9JBZpcoQdlMa4-j_-Quk8__ESvcYjtX8hojRbhyHY1dImBv4rVqQBfmR2kgEK-gopDiX04_PIOhicsqlaixuqo9I302MjmqNF6w8")
 
 
 def add_game_data(file, games, teams, players, events, shifts):
@@ -75,10 +75,14 @@ if not args.dry_run:
     with database.session() as db:
         with db.begin():
             if not args.dry_run:
-                db.execute(Database.upsert(game.Game, games))
                 db.execute(Database.upsert(team.Team, teams))
                 db.execute(Database.upsert(player.Player, players))
+                db.execute(Database.upsert(game.Game, games))
                 db.execute(Database.upsert(shift.Shift, shifts))
-    event_df = pd.concat(events)
-    event_df.to_sql("events", database.engine,
-                    if_exists="append", index=False)
+                db.commit()
+                db.close()
+        event_df = pd.concat(events)
+        event_df.replace('', np.NaN, inplace=True)
+        # print(event_df['recoveryId'].unique())
+        event_df.to_sql("events", database.engine,
+                        if_exists="append", index=False)

@@ -87,9 +87,9 @@ class NHLGameFeed:
                     'hand': player_dict["person"]["shootsCatches"],
                 }
             )
-            self.players_dict[(team_id, player_dict["jerseyNumber"])] = player_dict["person"][
+            self.players_dict[(team_id, int(player_dict["jerseyNumber"]))] = int(player_dict["person"][
                 "id"
-            ]
+            ])
         return players
 
     def _fill_game_metadata(self):
@@ -153,15 +153,15 @@ class NHLGameFeed:
             if event[i] == 'Blocked Shot':
                 event[i] = 'Missed Shot'
                 team[i] = awayTeamId if pbp[i]["team"]["id"] == homeTeamId else homeTeamId
-                p1[i] = pbp[i]["players"][1]["player"]["id"]
-                p2[i] = pbp[i]["players"][0]["player"]["id"]
+                p1[i] = int(pbp[i]["players"][1]["player"]["id"])
+                p2[i] = int(pbp[i]["players"][0]["player"]["id"])
                 # Do the action
             try:
                 team[i] = pbp[i]["team"]["id"]
             except KeyError:
                 pass
             try:
-                p1[i] = pbp[i]["players"][0]["player"]["id"]
+                p1[i] = int(pbp[i]["players"][0]["player"]["id"])
             except KeyError:
                 pass
             try:
@@ -171,7 +171,7 @@ class NHLGameFeed:
             try:
                 if event[i] == 'Goal':
                     continue
-                p2[i] = pbp[i]["players"][1]["player"]["id"]
+                p2[i] = int(pbp[i]["players"][1]["player"]["id"])
             except KeyError:
                 pass
             except IndexError:  # e.g. on a give or take

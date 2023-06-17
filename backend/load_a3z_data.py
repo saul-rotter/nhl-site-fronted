@@ -52,18 +52,18 @@ def clean_zone_entries(zone_entries):
     zone_entries["team"] = zone_entries["Entry By"].apply(
         lambda x: "".join(list(filter(str.isalpha, x)))
     )
-    zone_entries["player"] = zone_entries["Entry By"].apply(
+    zone_entries["player"] = pd.to_numeric(zone_entries["Entry By"].apply(
         lambda x: "".join(list(filter(str.isdigit, x)))
-    )
+    ), errors='coerce')
     zone_entries["oppTeam"] = zone_entries["Defended by"].apply(
-        lambda x: "".join(list(filter(str.isalpha, x)))
+        lambda x: "".join(list(filter(str.isalpha, str(x))))
     )
-    zone_entries["oppPlayer"] = zone_entries["Defended by"].apply(
-        lambda x: "".join(list(filter(str.isdigit, x)))
-    )
-    zone_entries["recovery"] = zone_entries["Dump recovered?"].apply(
-        lambda x: "".join(list(filter(str.isdigit, x)))
-    )
+    zone_entries["oppPlayer"] = pd.to_numeric(zone_entries["Defended by"].apply(
+        lambda x: "".join(list(filter(str.isdigit, str(x))))
+    ), errors='coerce')
+    zone_entries["recovery"] = pd.to_numeric(zone_entries["Dump recovered?"].apply(
+        lambda x: "".join(list(filter(str.isdigit, str(x))))
+    ), errors='coerce')
     zone_entries["event"] = "Zone Entry"
 
     entry_type = {
@@ -106,24 +106,24 @@ def clean_zone_exits(zone_exits):
     zone_exits["team"] = zone_exits["Retrieval"].apply(
         lambda x: "".join(list(filter(str.isalpha, x)))
     )
-    zone_exits["player"] = zone_exits[["Retrieval", "Exit"]].apply(
+    zone_exits["player"] = pd.to_numeric(zone_exits[["Retrieval", "Exit"]].apply(
         lambda x: "".join(list(filter(str.isdigit, x["Retrieval"])))
         if x["Exit"] == "N"
         else "".join(list(filter(str.isdigit, x["Exit"]))),
         axis=1,
-    )
-    zone_exits["retrieval"] = zone_exits[["Retrieval", "Exit"]].apply(
+    ), errors='coerce')
+    zone_exits["retrieval"] = pd.to_numeric(zone_exits[["Retrieval", "Exit"]].apply(
         lambda x: "".join(list(filter(str.isdigit, x["Retrieval"])))
         if x["Exit"] != "N"
         else "N",
         axis=1,
-    )
+    ), errors='coerce')
     zone_exits["oppTeam"] = zone_exits["Pressure"].apply(
         lambda x: "".join(list(filter(str.isalpha, x)))
     )
-    zone_exits["oppPlayer"] = zone_exits["Pressure"].apply(
+    zone_exits["oppPlayer"] = pd.to_numeric(zone_exits["Pressure"].apply(
         lambda x: "".join(list(filter(str.isdigit, x)))
-    )
+    ), errors='coerce')
     zone_exits["event"] = "Zone Exit"
     # shots[['SOG?', 'G?']].apply(lambda x: 'Goal' if x['G?'] == 'y' else (('Shot' if x['SOG?'] == 'y' else 'Missed Shot')), axis=1)
     exit_types = {
@@ -325,7 +325,7 @@ def get_clean_a3z_game_data(file_data, players_dict, teams_dict):
         lambda x: teams_dict[x] if x in teams_dict else None  # type: ignore
     )
     a3z_final["player"] = a3z_final[["player", "team"]].apply(
-        lambda x: players_dict[(x["team"], x["player"])],
+        lambda x: players_dict[(x["team"], int(x["player"]))],
         axis=1,
     )
     a3z_final["oppPlayer"] = a3z_final[["oppPlayer", "oppTeam"]].apply(
@@ -352,6 +352,12 @@ def get_clean_a3z_game_data(file_data, players_dict, teams_dict):
         lambda x: players_dict[(x["team"], x["tertiaryAssist"])]
         if (x["team"], x["tertiaryAssist"]) in players_dict
         else None,  # type: ignore
+        axis=1,
+    )
+    a3z_final["recovery"] = a3z_final[["recovery", "team"]].apply(
+        lambda x: players_dict[(x["team"], x["recovery"])]  # type: ignore
+        if (x["team"], x["recovery"]) in players_dict
+        else None,
         axis=1,
     )
     a3z_final["retrieval"] = a3z_final[["retrieval", "team"]].apply(
