@@ -2,7 +2,7 @@
 	"name": "trumedia-proj",
 	"version": "0.1.0",
 	"private": true,
-	"homepage": "https://saul-rotter.github.io/react_app",
+	"homepage": "https://nhl-play-tracker-tool2.vercel.app/",
 	"dependencies": {
 		"@elastic/datemath": "^5.0.3",
 		"@emotion/css": "^11.10.6",
