@@ -18,9 +18,7 @@ const GPTTeamCard = ({ teamData }) => {
 	};
 
 	const { id, name, score, coach } = teamData;
-	const logoPath = process.env.PUBLIC_URL + '/images/team-logos/';
-	const image = `http://localhost:3000/images/team-logos/${id}.jpg`;
-	console.log(image);
+	const logoPath = process.env.PUBLIC_URL + '/images/team-logos/' + id + '.jpg';
 	return (
 		<Card
 			style={{
@@ -43,7 +41,7 @@ const GPTTeamCard = ({ teamData }) => {
 							component='img'
 							alt={name}
 							height='50'
-							image={image}
+							image={logoPath}
 							style={{
 								objectFit: 'contain',
 								borderRadius: '50%',
