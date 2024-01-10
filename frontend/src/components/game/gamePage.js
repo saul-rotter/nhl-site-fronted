@@ -23,6 +23,6 @@ const GamePage = ({ gameData }) => {
 	const topCard = <GameCard gameData={gameData.data.game} />;
 	const eventsTable = <EventTable eventTableData={gameData.data.events} />;
 	return (
-		<PageLayout topCard={topCard} center={eventsTable} footer={'No content'} />
+		<PageLayout topCard={topCard} center={eventsTable} footer={<div></div>} />
 	);
 };

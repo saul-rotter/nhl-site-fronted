@@ -56,8 +56,12 @@ const GPTTeamCard = ({ teamData }) => {
 			</CardActionArea>
 			<Collapse in={expanded} timeout='auto' unmountOnExit>
 				<CardContent>
-					<Typography variant='body1'>Final Score: {score}</Typography>
-					<Typography variant='body2'>Coach: {coach}</Typography>
+					<Typography variant='body1' color={'#FFFFFF'}>
+						Final Score: {score}
+					</Typography>
+					<Typography variant='body2' color={'#FFFFFF'}>
+						Coach: {coach}
+					</Typography>
 				</CardContent>
 			</Collapse>
 		</Card>

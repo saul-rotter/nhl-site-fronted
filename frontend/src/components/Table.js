@@ -76,10 +76,10 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 			defaultColumn,
 			filterTypes,
 			initialState: {
-				hiddenColumns: columns[0].columns.map((column) => {
-					if (column.show === false) return column.accessor || column.id;
-				}),
-				pageSize: 25,
+				// hiddenColumns: columns[0].columns.map((column) => {
+				// 	if (column.show === false) return column.accessor || column.id;
+				// }),
+				pageSize: 10,
 			},
 		},
 		useFilters,
@@ -164,7 +164,13 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 						{page.map((row, i) => {
 							prepareRow(row);
 							return (
-								<TableRow {...row.getRowProps()}>
+								<TableRow
+									{...row.getRowProps()}
+									sx={{
+										'&:nth-of-type(odd)': {
+											backgroundColor: '#d3d3d3',
+										},
+									}}>
 									{row.cells.map((cell) => {
 										return (
 											<TableCell {...cell.getCellProps()}>
@@ -199,7 +205,7 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 					display: 'grid',
 					gridTemplateColumns: 'repeat(5, 1fr)',
 				}}>
-				<div>
+				{/* <div>
 					<IndeterminateCheckbox {...getToggleHideAllColumnsProps()} /> Toggle
 					All
 				</div>
@@ -210,7 +216,7 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 							{column.id}
 						</label>
 					</span>
-				))}
+				))} */}
 			</div>
 		</>
 	);
