@@ -79,7 +79,7 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 				// hiddenColumns: columns[0].columns.map((column) => {
 				// 	if (column.show === false) return column.accessor || column.id;
 				// }),
-				pageSize: 10,
+				pageSize: 5,
 			},
 		},
 		useFilters,

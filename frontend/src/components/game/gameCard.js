@@ -44,8 +44,14 @@ export const GameCard = ({ gameData }) => {
 		<Styles>
 			<Card variant='outlined'>
 				<CardContent>
-					<Typography variant='h5'>Game Start Time</Typography>
-					<Typography variant='caption'>{gameData['startTime']}</Typography>
+					<Typography variant='h5'>
+						{new Date(gameData['startTime']).toLocaleDateString('en-US', {
+							weekday: 'long',
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric',
+						})}
+					</Typography>
 					<Grid
 						container
 						spacing={2}
