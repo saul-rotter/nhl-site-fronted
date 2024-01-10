@@ -45,7 +45,7 @@ const EventTable = ({ eventTableData }) => {
 			columns: [
 				{
 					id: 'Period',
-					Header: <Typography>{'Period'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Period'}</Typography>,
 					accessor: 'period',
 					Filter: DropdownFilter,
 					show: true,
@@ -53,7 +53,7 @@ const EventTable = ({ eventTableData }) => {
 				},
 				{
 					id: 'Game Time',
-					Header: <Typography>{'Game Time'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Game Time'}</Typography>,
 					accessor: 'time',
 					disableFilters: true,
 					show: true,
@@ -61,14 +61,14 @@ const EventTable = ({ eventTableData }) => {
 				},
 				{
 					id: 'Home Score',
-					Header: <Typography>{'Home Score'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Home Score'}</Typography>,
 					accessor: 'homeScore',
 					Filter: DropdownFilter,
 					show: true,
 					disableGroupBy: true,
 				},
 				{
-					Header: <Typography variant='subtitle1'>{'Away Score'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Away Score'}</Typography>,
 					id: 'awayScore',
 					accessor: 'awayScore',
 					Filter: DropdownFilter,
@@ -76,7 +76,7 @@ const EventTable = ({ eventTableData }) => {
 					disableGroupBy: true,
 				},
 				{
-					Header: <Typography>{'Strength'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Strength'}</Typography>,
 					id: 'strength',
 					accessor: (row) => {
 						let team_on_ice = row.team_on_ice;
@@ -90,7 +90,7 @@ const EventTable = ({ eventTableData }) => {
 					show: true,
 				},
 				{
-					Header: <Typography>{'Event'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Event'}</Typography>,
 					accessor: 'event',
 					id: 'event',
 					Filter: DropdownFilter,
@@ -100,7 +100,7 @@ const EventTable = ({ eventTableData }) => {
 				},
 
 				{
-					Header: <Typography>{'Type'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Type'}</Typography>,
 					accessor: 'type',
 					id: 'type',
 					Filter: DropdownFilter,
@@ -109,66 +109,46 @@ const EventTable = ({ eventTableData }) => {
 					Aggregated: ({ value }) => `${value} Event Types`,
 				},
 				{
-					Header: <Typography>{'Team'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Team'}</Typography>,
 					accessor: 'team.name',
 					id: 'team',
 					Filter: TeamDropdownFilter,
 					show: true,
-					Cell: ({ row }) => {
-						return <TeamCell row={row} team_type={'team'} />;
-					},
-					filter: 'fuzzyText',
 					aggregate: 'count',
 					Aggregated: ({ value }) => `${value} Teams`,
 				},
 				{
-					Header: <Typography>{'Player'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Player'}</Typography>,
 					accessor: 'player.name',
 					id: 'player',
-					Cell: ({ row }) => {
-						return (
-							<PlayerCell row={row} team={'teamId'} player_type={'player'} />
-						);
-					},
-					filter: 'fuzzyText',
 					show: true,
 					aggregate: 'uniqueCount',
 					Aggregated: ({ value }) => `${value} Players`,
 				},
 				{
-					Header: <Typography>{'Opposing Team'}</Typography>,
+					Header: (
+						<Typography variant='subtitle2'>{'Opposing Team'}</Typography>
+					),
 					accessor: 'oppTeam.name',
 					id: 'oppTeam',
 					Filter: TeamDropdownFilter,
 					show: true,
 					aggregate: 'uniqueCount',
-					Cell: ({ row }) => {
-						return <TeamCell row={row} team_type={'oppTeam'} />;
-					},
-					filter: 'fuzzyText',
 					aggregate: 'count',
 					Aggregated: ({ value }) => `${value} Teams`,
 				},
 				{
-					Header: <Typography>{'Opposing Player'}</Typography>,
+					Header: (
+						<Typography variant='subtitle2'>{'Opposing Player'}</Typography>
+					),
 					accessor: 'oppPlayer.name',
 					id: 'oppPlayer',
-					Cell: ({ row }) => {
-						return (
-							<PlayerCell
-								row={row}
-								team={'oppTeamId'}
-								player_type={'oppPlayer'}
-							/>
-						);
-					},
-					filter: 'fuzzyText',
 					show: true,
 					aggregate: 'uniqueCount',
 					Aggregated: ({ value }) => `${value} Players`,
 				},
 				{
-					Header: <Typography>{'Team on Ice'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Team on Ice'}</Typography>,
 					id: 'team_on_ice',
 					accessor: 'team_on_ice',
 					Cell: ({ cell: { row, value } }) => {
@@ -176,12 +156,15 @@ const EventTable = ({ eventTableData }) => {
 						return <Players values={value} backgroundColor={backgroundColor} />;
 					},
 					filter: 'fuzzyList',
-					show: false,
 					disableGroupBy: true,
 					Aggregated: () => ``,
 				},
 				{
-					Header: <Typography>{'Opposing Team on Ice'}</Typography>,
+					Header: (
+						<Typography variant='subtitle2'>
+							{'Opposing Team on Ice'}
+						</Typography>
+					),
 					accessor: 'opp_team_on_ice',
 					id: 'opp_team_on_ice',
 					Cell: ({ cell: { row, value } }) => {
@@ -189,151 +172,140 @@ const EventTable = ({ eventTableData }) => {
 						return <Players values={value} backgroundColor={backgroundColor} />;
 					},
 					filter: 'fuzzyList',
-					show: false,
 					disableGroupBy: true,
 					Aggregated: ({ value }) => ``,
 				},
 				{
-					Header: <Typography>{'Play Type'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Play Type'}</Typography>,
 					accessor: 'playType',
 					id: 'playType',
 					show: false,
 				},
 				{
-					Header: <Typography>{'Chance'}</Typography>,
+					Header: (
+						<Typography variant='subtitle2' y>
+							{'Chance'}
+						</Typography>
+					),
 					accessor: 'chance',
 					id: 'chance',
 					show: false,
 				},
 				{
-					Header: <Typography>{'Lane'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Lane'}</Typography>,
 					accessor: 'lane',
 					id: 'lane',
 					show: false,
 				},
 				{
-					Header: <Typography>{'Oddman'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Oddman'}</Typography>,
 					accessor: 'oddman',
 					id: 'oddman',
 					show: false,
 				},
+				// {
+				// 	Header: (
+				// 		<Typography variant='subtitle2'>{'Primary Assist'}</Typography>
+				// 	),
+				// 	accessor: 'primaryAssist.name',
+				// 	id: 'primaryAssist',
+				// 	disableGroupBy: true,
+				// 	show: false,
+				// },
+				// {
+				// 	Header: <Typography variant='subtitle2'>{'Primary Lane'}</Typography>,
+				// 	accessor: 'primaryLane',
+				// 	id: 'primaryLane',
+				// 	show: false,
+				// },
+				// {
+				// 	Header: (
+				// 		<Typography variant='subtitle2'>{'Primary Pass Type'}</Typography>
+				// 	),
+				// 	accessor: 'primaryPassType',
+				// 	id: 'primaryPassType',
+				// 	show: false,
+				// },
+				// {
+				// 	Header: <Typography variant='subtitle2'>{'Primary Zone'}</Typography>,
+				// 	accessor: 'primaryZone',
+				// 	id: 'primaryZone',
+				// 	show: false,
+				// },
+				// {
+				// 	Header: (
+				// 		<Typography variant='subtitle2'>{'Secondary Assist'}</Typography>
+				// 	),
+				// 	accessor: 'secondaryAssist.name',
+				// 	id: 'secondaryAssist',
+				// 	disableGroupBy: true,
+				// 	show: false,
+				// },
+				// {
+				// 	Header: (
+				// 		<Typography variant='subtitle2'>{'Secondary Lane'}</Typography>
+				// 	),
+				// 	accessor: 'secondaryLane',
+				// 	id: 'secondaryLane',
+				// 	show: false,
+				// },
+				// {
+				// 	Header: (
+				// 		<Typography variant='subtitle2'>{'Secondary Pass Type'}</Typography>
+				// 	),
+				// 	accessor: 'secondaryPassType',
+				// 	id: 'secondaryPassType',
+				// 	show: false,
+				// },
+				// {
+				// 	Header: (
+				// 		<Typography variant='subtitle2'>{'Secondary Zone'}</Typography>
+				// 	),
+				// 	accessor: 'secondaryZone',
+				// 	id: 'secondaryZone',
+				// 	show: false,
+				// },
+				// {
+				// 	Header: (
+				// 		<Typography variant='subtitle2'>{'Tertiary Assist'}</Typography>
+				// 	),
+				// 	accessor: 'tertiaryAssist.name',
+				// 	id: 'tertiaryAssist',
+				// 	disableGroupBy: true,
+				// 	show: false,
+				// },
+				// {
+				// 	Header: (
+				// 		<Typography variant='subtitle2'>{'Tertiary Lane'}</Typography>
+				// 	),
+				// 	accessor: 'tertiaryLane',
+				// 	id: 'tertiaryLane',
+				// 	show: false,
+				// },
+				// {
+				// 	Header: (
+				// 		<Typography variant='subtitle2'>{'Tertiary Pass Type'}</Typography>
+				// 	),
+				// 	accessor: 'tertiaryPassType',
+				// 	id: 'tertiaryPassType',
+				// 	show: false,
+				// },
+				// {
+				// 	Header: (
+				// 		<Typography variant='subtitle2'>{'Tertiary Zone'}</Typography>
+				// 	),
+				// 	accessor: 'tertiaryprimaryZone',
+				// 	id: 'tertiaryprimaryZone',
+				// 	show: false,
+				// },
 				{
-					Header: <Typography>{'Primary Assist'}</Typography>,
-					accessor: 'primaryAssist.name',
-					id: 'primaryAssist',
-					Cell: ({ row }) => {
-						return (
-							<PlayerCell
-								row={row}
-								team={'teamId'}
-								player_type={'primaryAssist'}
-							/>
-						);
-					},
-					show: false,
-				},
-				{
-					Header: <Typography>{'Primary Lane'}</Typography>,
-					accessor: 'primaryLane',
-					id: 'primaryLane',
-					show: false,
-				},
-				{
-					Header: <Typography>{'Primary Pass Type'}</Typography>,
-					accessor: 'primaryPassType',
-					id: 'primaryPassType',
-					show: false,
-				},
-				{
-					Header: <Typography>{'Primary Zone'}</Typography>,
-					accessor: 'primaryZone',
-					id: 'primaryZone',
-					show: false,
-				},
-				{
-					Header: <Typography>{'Secondary Assist'}</Typography>,
-					accessor: 'secondaryAssist.name',
-					id: 'secondaryAssist',
-					Cell: ({ row }) => {
-						return (
-							<PlayerCell
-								row={row}
-								team={'teamId'}
-								player_type={'secondaryAssist'}
-							/>
-						);
-					},
-					show: false,
-				},
-				{
-					Header: <Typography>{'Secondary Lane'}</Typography>,
-					accessor: 'secondaryLane',
-					id: 'secondaryLane',
-					show: false,
-				},
-				{
-					Header: <Typography>{'Secondary Pass Type'}</Typography>,
-					accessor: 'secondaryPassType',
-					id: 'secondaryPassType',
-					show: false,
-				},
-				{
-					Header: <Typography>{'Secondary Zone'}</Typography>,
-					accessor: 'secondaryZone',
-					id: 'secondaryZone',
-					show: false,
-				},
-				{
-					Header: <Typography>{'Tertiary Assist'}</Typography>,
-					accessor: 'tertiaryAssist.name',
-					id: 'tertiaryAssist',
-					Cell: ({ row }) => {
-						return (
-							<PlayerCell
-								row={row}
-								team={'teamId'}
-								player_type={'tertiaryAssist'}
-							/>
-						);
-					},
-					show: false,
-				},
-				{
-					Header: <Typography>{'Tertiary Lane'}</Typography>,
-					accessor: 'tertiaryLane',
-					id: 'tertiaryLane',
-					show: false,
-				},
-				{
-					Header: <Typography>{'Tertiary Pass Type'}</Typography>,
-					accessor: 'tertiaryPassType',
-					id: 'tertiaryPassType',
-					show: false,
-				},
-				{
-					Header: <Typography>{'Tertiary Zone'}</Typography>,
-					accessor: 'tertiaryprimaryZone',
-					id: 'tertiaryprimaryZone',
-					show: false,
-				},
-				{
-					Header: <Typography>{'Recovery'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Recovery'}</Typography>,
 					accessor: 'recovery.name',
-					Cell: ({ row }) => {
-						return (
-							<PlayerCell row={row} team={'teamId'} player_type={'recovery'} />
-						);
-					},
 					show: false,
 				},
 				{
-					Header: <Typography>{'Retrieval'}</Typography>,
+					Header: <Typography variant='subtitle2'>{'Retrieval'}</Typography>,
 					accessor: 'retrieval.name',
-					Cell: ({ row }) => {
-						return (
-							<PlayerCell row={row} team={'teamId'} player_type={'retrieval'} />
-						);
-					},
 					show: false,
 				},
 			],
@@ -350,42 +322,42 @@ const EventTable = ({ eventTableData }) => {
 	);
 };
 
-const PlayerCell = ({ row, team, player_type }) => {
-	let backgroundColor;
-	let player;
-	if (row.isGrouped) {
-		backgroundColor = teamColors[row.leafRows[0].original[team]];
-		player = row.leafRows[0].original[player_type];
-	} else {
-		backgroundColor = teamColors[row.original[team]];
-		player = row.original[player_type];
-	}
-	return (
-		<PlayerCellInstance player={player} backgroundColor={backgroundColor} />
-	);
-};
+// const PlayerCell = ({ row, team, player_type }) => {
+// 	let backgroundColor;
+// 	let player;
+// 	if (row.isGrouped) {
+// 		backgroundColor = teamColors[row.leafRows[0].original[team]];
+// 		player = row.leafRows[0].original[player_type];
+// 	} else {
+// 		backgroundColor = teamColors[row.original[team]];
+// 		player = row.original[player_type];
+// 	}
+// 	return (
+// 		<PlayerCellInstance player={player} backgroundColor={backgroundColor} />
+// 	);
+// };
 
-const TeamCell = ({ row, team_type }) => {
-	let backgroundColor;
-	let team;
-	if (row.isGrouped) {
-		team = row.leafRows[0].original[team_type];
-		console.log(team);
-		backgroundColor = teamColors[row.leafRows[0].original[team_type].id];
-	} else {
-		team = row.original[team_type];
-		backgroundColor = teamColors[row.original[team_type].id];
-	}
-	return (
-		<span
-			className='badge'
-			style={{
-				backgroundColor: backgroundColor,
-			}}>
-			<TeamAvatar teamId={team.id} />
-			{<Typography variant='caption'> {team.name}</Typography>}
-		</span>
-	);
-};
+// const TeamCell = ({ row, team_type }) => {
+// 	let backgroundColor;
+// 	let team;
+// 	if (row.isGrouped) {
+// 		team = row.leafRows[0].original[team_type];
+// 		console.log(team);
+// 		backgroundColor = teamColors[row.leafRows[0].original[team_type].id];
+// 	} else {
+// 		team = row.original[team_type];
+// 		backgroundColor = teamColors[row.original[team_type].id];
+// 	}
+// 	return (
+// 		<span
+// 			className='badge'
+// 			style={{
+// 				backgroundColor: backgroundColor,
+// 			}}>
+// 			<TeamAvatar teamId={team.id} />
+// 			{<Typography variant='caption'> {team.name}</Typography>}
+// 		</span>
+// 	);
+// };
 
 export default EventTable;

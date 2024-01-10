@@ -10,7 +10,7 @@ export const Players = ({ values, backgroundColor }) => {
 	return (
 		<>
 			{values.map((player, idx) => {
-				return <Player player={player} backgroundColor={backgroundColor} />;
+				return player.name + ', ';
 			})}
 		</>
 	);
@@ -34,32 +34,9 @@ export const PlayerCellInstance = ({ player }) => {
 	}
 	return (
 		<div>
-			<Typography
-				aria-owns={open ? 'mouse-over-popover' : undefined}
-				aria-haspopup='true'
-				onMouseEnter={handlePopoverOpen}
-				onMouseLeave={handlePopoverClose}>
+			<Typography>
 				{name}
 			</Typography>
-			<Popover
-				id='mouse-over-popover'
-				sx={{
-					pointerEvents: 'none',
-				}}
-				open={open}
-				anchorEl={anchorEl}
-				anchorOrigin={{
-					vertical: 'bottom',
-					horizontal: 'left',
-				}}
-				transformOrigin={{
-					vertical: 'top',
-					horizontal: 'left',
-				}}
-				onClose={handlePopoverClose}
-				disableRestoreFocus>
-				{card}
-			</Popover>
 		</div>
 	);
 };

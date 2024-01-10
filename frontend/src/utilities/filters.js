@@ -58,7 +58,7 @@ export function TeamDropdownFilter({
 	const options = React.useMemo(() => {
 		const options = new Set();
 		preFilteredRows.forEach((row) => {
-			return options.add(row.values[id]['name']);
+			return options.add(row.values[id]);
 		});
 		return [...options.values()];
 	}, [id, preFilteredRows]);

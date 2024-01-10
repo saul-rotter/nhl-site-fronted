@@ -33,6 +33,7 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
 
 const GPTPlayerCard = ({ player }) => {
 	const { id, name, position, teamId, handedness } = player;
+	console.log(player);
 
 	// Assuming teamColors is an object with teamId as keys and color values
 	const backgroundColor = teamColors[teamId] || '#FFFFFF';

@@ -148,7 +148,7 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 										{column.canGroupBy ? (
 											// If the column can be grouped, let's add a toggle
 											<span {...column.getGroupByToggleProps()}>
-												{column.isGrouped ? '🛑 ' : '👊 '}
+												{column.isGrouped ? '⬇️' : '➡️'}
 											</span>
 										) : null}
 										{column.render('Header')}
@@ -172,7 +172,7 @@ const BaseTable = ({ columns, data, shouldPaginate }) => {
 													// If it's a grouped cell, add an expander and row count
 													<>
 														<span {...row.getToggleRowExpandedProps()}>
-															{row.isExpanded ? '👇' : '👉'}
+															{row.isExpanded ? '⬇️' : '➡️'}
 														</span>{' '}
 														{cell.render('Cell')} ({row.subRows.length})
 													</>
